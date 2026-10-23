@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "recipes": [
+    {
+      "id": "deepseek-v4-intent-and-depth",
+      "displayName": "DeepSeek V4.1 — 先明意图、深想一层、闭环交付",
+      "description": "针对 DeepSeek 思考浅、易机械照搬字面而迷失目标的问题：强制动手前重构真实意图与完成判据，穿透表面症状推演完整机制与反例，连续闭环到可用成果。",
+      "version": "1.0.0",
+      "source": "https://raw.githubusercontent.com/X-T-E-R/kiki-recipes/main/recipes/deepseek-v4-intent-and-depth/recipe.toml"
+    },
+    {
+      "id": "gemini-3.8-flash-craft",
+      "displayName": "Gemini 3.8 Flash — 锚定样板、留白克制、闭环交付",
+      "description": "针对 Gemini 3.8 Flash（小参数量，主攻写作、前端与有界杂活）定制：强制先锚定现成样板与任务清单，不脱离样板乱发散；给前端立具象化的空间与文字留白硬杠，给写作与改稿立说人话与就地融合铁律，并保持高并发工具效率。",
+      "version": "1.0.0",
+      "source": "https://raw.githubusercontent.com/X-T-E-R/kiki-recipes/main/recipes/gemini-3.8-flash-craft/recipe.toml"
+    },
+    {
+      "id": "gemini-4-argon-with-taste",
+      "displayName": "Gemini 4 Argon with Taste — 工作方式",
+      "description": "Argon 的 main 工作方式、文学通感审美层、合同内 sub 质量层与近输入持续 Steer；独立 host 保持中立身份。",
+      "version": "1.1.0",
+      "source": "https://raw.githubusercontent.com/X-T-E-R/kiki-recipes/main/recipes/gemini-4-argon-with-taste/recipe.toml"
+    },
+    {
+      "id": "gpt-6-astra-behavior",
+      "displayName": "GPT-6 Astra — 工作方式",
+      "description": "Better judgment. Better taste. Less ceremony.",
+      "version": "1.0.7",
+      "source": "https://raw.githubusercontent.com/X-T-E-R/kiki-recipes/main/recipes/gpt-6-astra-behavior/recipe.toml"
+    },
+    {
+      "id": "gpt-6.1-sol-behavior",
+      "displayName": "GPT-6.1 Sol — 工作方式",
+      "description": "Better judgment. Better taste. Less ceremony.",
+      "version": "1.0.7",
+      "source": "https://raw.githubusercontent.com/X-T-E-R/kiki-recipes/main/recipes/gpt-6.1-sol-behavior/recipe.toml"
+    }
+  ]
+}

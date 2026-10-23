@@ -1,0 +1,37 @@
+schema_version = 1
+id = "gemini-4-argon-with-taste"
+name = "Gemini 4 Argon with Taste — 工作方式"
+version = "1.1.0"
+description = "Argon 的 main 工作方式、文学通感审美层、合同内 sub 质量层与近输入持续 Steer；独立 host 保持中立身份。"
+
+[prompts]
+system = { file = "argon-sub.md" }
+steering = { file = "argon-sub-steer.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.steering_sources.agent]
+mode = "inherit"
+
+[prompts.main]
+system = { file = "argon-main.md" }
+steering = { file = "argon-user-steer.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.main.steering_sources.agent]
+mode = "custom"
+custom = { steering = { file = "argon-agent-steer.md" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.main.steering_sources.task]
+mode = "custom"
+custom = { steering = { file = "argon-agent-steer.md" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.independent]
+system = { file = "argon-independent.md" }
+steering = "off"
+steering_on_turn = false
+steering_on_input = false
+steering_interval_steps = 0

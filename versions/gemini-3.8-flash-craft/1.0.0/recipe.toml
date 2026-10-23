@@ -1,0 +1,43 @@
+schema_version = 1
+id = "gemini-3.8-flash-craft"
+name = "Gemini 3.8 Flash — 锚定样板、留白克制、闭环交付"
+version = "1.0.0"
+description = "针对 Gemini 3.8 Flash（小参数量，主攻写作、前端与有界杂活）定制：强制先锚定现成样板与任务清单，不脱离样板乱发散；给前端立具象化的空间与文字留白硬杠，给写作与改稿立说人话与就地融合铁律，并保持高并发工具效率。"
+
+[prompts]
+system = { file = "g38f-sub.md" }
+steering = { file = "g38f-sub-steer.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.steering_sources.agent]
+mode = "inherit"
+
+[prompts.main]
+system = { file = "g38f-main.md" }
+steering = { file = "g38f-user-steer.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.main.steering_sources.agent]
+mode = "custom"
+custom = { steering = { file = "g38f-agent-steer.md" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.main.steering_sources.task]
+mode = "custom"
+custom = { steering = { file = "g38f-agent-steer.md" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.independent]
+system = { file = "g38f-independent.md" }
+steering = "off"
+steering_on_turn = false
+steering_on_input = false
+steering_interval_steps = 0
+
+[prompts.independent.steering_sources.agent]
+mode = "off"
+
+[prompts.independent.steering_sources.task]
+mode = "off"

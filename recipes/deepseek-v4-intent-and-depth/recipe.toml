@@ -1,0 +1,43 @@
+schema_version = 1
+id = "deepseek-v4-intent-and-depth"
+name = "DeepSeek V4.1 — 先明意图、深想一层、闭环交付"
+version = "1.0.0"
+description = "针对 DeepSeek 思考浅、易机械照搬字面而迷失目标的问题：强制动手前重构真实意图与完成判据，穿透表面症状推演完整机制与反例，连续闭环到可用成果。"
+
+[prompts]
+system = { file = "deepseek-sub.md" }
+steering = { file = "deepseek-sub-steer.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.steering_sources.agent]
+mode = "inherit"
+
+[prompts.main]
+system = { file = "deepseek-main.md" }
+steering = { file = "deepseek-user-steer.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.main.steering_sources.agent]
+mode = "custom"
+custom = { steering = { file = "deepseek-agent-steer.md" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.main.steering_sources.task]
+mode = "custom"
+custom = { steering = { file = "deepseek-agent-steer.md" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.independent]
+system = { file = "deepseek-independent.md" }
+steering = "off"
+steering_on_turn = false
+steering_on_input = false
+steering_interval_steps = 0
+
+[prompts.independent.steering_sources.agent]
+mode = "off"
+
+[prompts.independent.steering_sources.task]
+mode = "off"

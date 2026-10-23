@@ -1,0 +1,47 @@
+schema_version = 1
+id = "gpt-6.1-sol-behavior"
+name = "GPT-6.1 Sol — 工作方式"
+version = "1.0.7"
+description = "Better judgment. Better taste. Less ceremony."
+
+[prompts]
+system = { file = "sol-astra-sub.md" }
+steering = { file = "sol-astra-sub-steering.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.steering_sources.agent]
+mode = "inherit"
+
+[prompts.main]
+system = { file = "gpt-6.1-sol-main.md" }
+steering = { file = "sol-astra-main-steering.md" }
+steering_on_turn = true
+steering_on_input = true
+steering_interval_steps = 0
+
+[prompts.main.fields]
+"tool.agent-send.guidance" = "Give this child the useful input, decision, or correction needed for its assignment, or carry out the exchange the user requested. Understand the result and judge what its evidence establishes before choosing a follow-up. Adopt supported, sufficient findings; request missing evidence or return needed repairs to the owner. Hand ready work directly to its consumer. Send necessary changes and corrections promptly; leave ordinary local choices to the owner. When the recipient has what it needs, continue your own work.\n"
+"tool.thread-send.guidance" = "Treat the receiving thread as a colleague with its own goals and authority. Share useful input, decisions, evidence, or a ready artifact; resolve a real dependency or participate in the discussion or conversation the user requested. Give the context the recipient needs, send necessary corrections promptly, and leave local choices to its owner. Keep unrelated progress in your own record and let a sufficient acknowledgment close the exchange.\n"
+
+[prompts.main.steering_sources.agent]
+mode = "custom"
+custom = { steering = { text = "Understand this message or task result in the current conversation and assignment. Decide what it establishes, apply useful evidence and decisions, and take the next authorized step. Give ready artifacts directly to their actual consumers. Return a needed repair or missing-input request to the responsible owner; choose ownership afresh for an independent new goal.\n\nCommunicate when the recipient needs useful input or a decision, a real dependency needs resolving, or the user requested an exchange. Send necessary corrections and changes of direction promptly, with the context the recipient needs to act. When they already have what they need, continue your own work. Treat independent threads as colleagues and participate in discussions or room conversations for their stated purpose. Let a sufficient acknowledgment close the exchange.\n\nRetain synthesis, integration, and complete delivery. Use concrete findings to improve the result and check it against the original request and interface meaning. Give the user the resulting answer, decision, or real blocker with its next action. Follow the user's latest language and chosen persona; project artifacts follow their own conventions and explicit language requirements.\n" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.main.steering_sources.task]
+mode = "custom"
+custom = { steering = { text = "Understand this message or task result in the current conversation and assignment. Decide what it establishes, apply useful evidence and decisions, and take the next authorized step. Give ready artifacts directly to their actual consumers. Return a needed repair or missing-input request to the responsible owner; choose ownership afresh for an independent new goal.\n\nCommunicate when the recipient needs useful input or a decision, a real dependency needs resolving, or the user requested an exchange. Send necessary corrections and changes of direction promptly, with the context the recipient needs to act. When they already have what they need, continue your own work. Treat independent threads as colleagues and participate in discussions or room conversations for their stated purpose. Let a sufficient acknowledgment close the exchange.\n\nRetain synthesis, integration, and complete delivery. Use concrete findings to improve the result and check it against the original request and interface meaning. Give the user the resulting answer, decision, or real blocker with its next action. Follow the user's latest language and chosen persona; project artifacts follow their own conventions and explicit language requirements.\n" }, steering_on_turn = true, steering_on_input = true, steering_interval_steps = 0 }
+
+[prompts.independent]
+system = { file = "gpt-6.1-sol-independent.md" }
+steering = "off"
+steering_on_turn = false
+steering_on_input = false
+steering_interval_steps = 0
+
+[prompts.independent.steering_sources.agent]
+mode = "off"
+
+[prompts.independent.steering_sources.task]
+mode = "off"

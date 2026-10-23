@@ -1,0 +1,13 @@
+{
+  "name": "kiki-recipes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kiki model recipes, packaged for direct import and for the recipe market.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
