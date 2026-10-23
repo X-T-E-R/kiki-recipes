@@ -7,7 +7,7 @@
  *   3. packs releases/<id>-<version>.zip (deterministic, files at the archive root)
  *      and writes the matching SHA-256 digest next to it
  *   4. writes catalog.json, catalog-pinned.json and catalog-zip.json
- *   5. writes index.html for the GitHub Pages site
+ *   5. renders index.html for the GitHub Pages site via scripts/render-index.mjs
  *
  * Run: node scripts/build.mjs
  */
@@ -17,6 +17,7 @@ import { readFile, writeFile, mkdir, readdir, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderIndex } from './render-index.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPO = 'X-T-E-R/kiki-recipes';
@@ -320,157 +321,6 @@ function catalogFor(packages, kind) {
   return { version: 1, recipes };
 }
 
-function escapeHtml(value) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;');
-}
-
-function renderIndex(packages) {
-  const rows = packages
-    .map((pkg) => {
-      const short = `${pkg.sha256.slice(0, 12)}…${pkg.sha256.slice(-8)}`;
-      return `        <li>
-          <div class="row-head">
-            <h3>${escapeHtml(pkg.name)}</h3>
-            <span class="version">v${escapeHtml(pkg.version)}</span>
-          </div>
-          <p class="id">${escapeHtml(pkg.id)}</p>
-          <p class="note">${escapeHtml(pkg.description)}</p>
-          <p class="links">
-            <a href="${rawUrl(BRANCH, `recipes/${pkg.id}/recipe.toml`)}">recipe.toml</a>
-            <a href="${rawUrl(BRANCH, `releases/${pkg.id}-${pkg.version}.zip`)}">zip</a>
-            <a href="${rawUrl(BRANCH, `releases/${pkg.id}-${pkg.version}.zip.sha256`)}">sha256</a>
-            <span class="digest">${escapeHtml(short)}</span>
-          </p>
-        </li>`;
-    })
-    .join('\n');
-
-  return `<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kiki Recipes</title>
-<meta name="description" content="五套 Kiki 模型配方：工作方式、思考深度与审美取向，按订阅或按版本锁定的方式引入。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap">
-<style>
-  :root {
-    --paper: #faf8f3;
-    --ink: #1b1a17;
-    --muted: #6b665c;
-    --line: #e2ddd2;
-    --accent: #1f5a4c;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: "IBM Plex Sans", "Helvetica Neue", sans-serif;
-    font-size: 16px;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
-  main { max-width: 46rem; margin: 0 auto; padding: 6rem 1.5rem 5rem; }
-  header { margin-bottom: 4.5rem; }
-  h1 {
-    font-family: "Fraunces", Georgia, serif;
-    font-weight: 600;
-    font-size: clamp(2.6rem, 6vw, 3.9rem);
-    line-height: 1.02;
-    letter-spacing: -0.015em;
-    margin: 0 0 1.1rem;
-  }
-  .lede { font-size: 1.1rem; color: var(--muted); max-width: 32rem; margin: 0; text-wrap: balance; }
-  h2 {
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 1.4rem;
-  }
-  section { margin-bottom: 4.5rem; }
-  .markets { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  .markets li { padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
-  .markets .label { font-weight: 500; }
-  .markets .mode { color: var(--muted); font-size: 0.9rem; margin-left: 0.5rem; }
-  .markets a { display: block; margin-top: 0.35rem; color: var(--accent); font-size: 0.9rem; overflow-wrap: anywhere; }
-  .recipes { list-style: none; margin: 0; padding: 0; }
-  .recipes li { padding: 1.6rem 0; border-top: 1px solid var(--line); }
-  .recipes li:last-child { border-bottom: 1px solid var(--line); }
-  .row-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
-  .row-head h3 {
-    font-family: "Fraunces", Georgia, serif;
-    font-weight: 400;
-    font-size: 1.35rem;
-    line-height: 1.25;
-    margin: 0;
-  }
-  .version { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .id { font-size: 0.82rem; color: var(--muted); margin: 0.15rem 0 0.5rem; }
-  .id, .digest { font-family: ui-monospace, "SFMono-Regular", "Cascadia Mono", monospace; }
-  .note { margin: 0 0 0.7rem; color: #3d3a34; }
-  .links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 1.1rem; margin: 0; font-size: 0.9rem; }
-  .links a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(31, 90, 76, 0.28); }
-  .links a:hover { border-bottom-color: var(--accent); }
-  .digest { color: var(--muted); font-size: 0.78rem; }
-  footer { border-top: 1px solid var(--line); padding-top: 1.4rem; color: var(--muted); font-size: 0.88rem; }
-  a { color: var(--accent); }
-  @media (max-width: 34rem) {
-    main { padding: 3.5rem 1.25rem 3rem; }
-    header { margin-bottom: 3rem; }
-    section { margin-bottom: 3rem; }
-  }
-</style>
-</head>
-<body>
-<main>
-  <header>
-    <h1>Kiki Recipes</h1>
-    <p class="lede">五套模型配方：工作方式、思考深度与审美取向。订阅市场自动追更，或按版本锁定长期不动。</p>
-  </header>
-
-  <section>
-    <h2>订阅市场</h2>
-    <ul class="markets">
-      <li>
-        <span class="label">catalog.json</span><span class="mode">跟随 main 更新</span>
-        <a href="catalog.json">catalog.json</a>
-      </li>
-      <li>
-        <span class="label">catalog-pinned.json</span><span class="mode">锁定当前版本的内容</span>
-        <a href="catalog-pinned.json">catalog-pinned.json</a>
-      </li>
-      <li>
-        <span class="label">catalog-zip.json</span><span class="mode">ZIP + SHA-256 硬锁定</span>
-        <a href="catalog-zip.json">catalog-zip.json</a>
-      </li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>配方</h2>
-    <ul class="recipes">
-${rows}
-    </ul>
-  </section>
-
-  <footer>
-    维护：改动 <span class="digest">recipes/&lt;id&gt;/</span> 并升级 version，然后运行 <span class="digest">node scripts/build.mjs</span>。
-  </footer>
-</main>
-</body>
-</html>
-`;
-}
-
 async function main() {
   const recipesDir = path.join(ROOT, 'recipes');
   const ids = (await readdir(recipesDir, { withFileTypes: true }))
@@ -499,7 +349,10 @@ async function main() {
     await writeFile(path.join(ROOT, name), `${JSON.stringify(catalog, null, 2)}\n`);
   }
 
-  await writeFile(path.join(ROOT, 'index.html'), renderIndex(packages));
+  await writeFile(
+    path.join(ROOT, 'index.html'),
+    renderIndex(packages, { repo: REPO, branch: BRANCH }),
+  );
 
   console.log('');
   for (const pkg of packages) {

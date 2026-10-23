@@ -4,6 +4,8 @@
 
 每套配方都有四种取用方式：跟随 `main` 的直连地址、按版本号冻结的地址、按 Git tag 冻结的地址，以及带 SHA-256 校验和的 ZIP。发过版的地址不会因为后续改动而变，需要更新时升 `version` 再发一版。
 
+在线规格页（含镜像/通道切换与配方源码工作台）：<https://x-t-e-r.github.io/kiki-recipes/>。仓库以 MIT License 发布。
+
 ## 一键订阅（配方市场）
 
 Kiki 里打开 `设置 → 模型 → 选择配方 → 市场`，粘贴下面任一地址：
@@ -163,3 +165,7 @@ kiki-recipes/
 ```
 
 配方文件遵循 Kiki 的包格式：`recipe.toml` 里的每个 `{ file = "..." }` 都是包内相对路径，不许跨目录；ZIP 压缩包根目录下只能有一个 `recipe.toml`。
+
+## 许可
+
+MIT License，Copyright (c) 2026 X-T-E-R。完整条款见 [LICENSE](LICENSE)：可以自由使用、修改、分发，包括商用，保留版权与许可声明即可。
