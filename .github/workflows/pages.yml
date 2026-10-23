@@ -22,7 +22,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -R recipes versions releases index.html catalog.json catalog-pinned.json catalog-zip.json _site/
+          cp -R recipes versions releases index.html catalog.json catalog-pinned.json catalog-zip.json LICENSE _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
