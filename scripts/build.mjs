@@ -387,7 +387,7 @@ function renderIndex(packages) {
     letter-spacing: -0.015em;
     margin: 0 0 1.1rem;
   }
-  .lede { font-size: 1.1rem; color: var(--muted); max-width: 32rem; margin: 0; }
+  .lede { font-size: 1.1rem; color: var(--muted); max-width: 32rem; margin: 0; text-wrap: balance; }
   h2 {
     font-size: 0.78rem;
     font-weight: 500;
